@@ -13,6 +13,7 @@
 \usepackage{xcolor}
 \usepackage[most]{tcolorbox}
 \usepackage{enumitem}
+\usepackage{amsmath, amssymb}
 \usepackage{hyperref}
 \usepackage{times}
 \usepackage{algorithm}
@@ -150,6 +151,118 @@
 \subsection{Project 5: Các Bài Toán Tìm Đường Đi Ngắn Nhất Trên Đồ Thị}
 
 \newpage
+
+\section{Project 3:  Integer Partition – Đồ Án: Phân Hoạch Số Nguyên}
+
+\subsection{Bài toán 1: Biểu đồ Ferrers and biểu đồ Ferrers chuyển vị}
+
+\begin{problembox}
+Nhập $n, k \in \mathbb{N}$. Viết chương trình C/C++, Python để in ra $p_k(n)$ biểu đồ Ferrers $F$ \& biểu đồ Ferrers chuyển vị $F^\top$ cho mỗi phân hoạch $\lambda = (\lambda_1, \lambda_2, \ldots, \lambda_k) \in (\mathbb{N}^*)^k$ có định dạng các dấu chấm được biểu diễn bởi dấu *.
+
+\end{problembox}
+
+\textbf{Phân tích đề bài:}
+
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Input:} Hai số nguyên dương n và k
+    \item \textbf{Yêu cầu:} Tìm tất cả các phân hoạch của n thành đúng k phần
+    \item \textbf{Output:} Với mỗi phân hoạch, in biểu đồ Ferrers và biểu đồ Ferrers chuyển vị
+    \item \textbf{Định dạng:} Sử dụng dấu * để biểu diễn các phần tử trong biểu đồ
+\end{itemize}
+
+\textbf{Kiến thức nền tảng:}
+\vspace{0.2cm}
+
+\textbf{Phân hoạch số nguyên (Integer Partition):} 
+\begin{itemize}[label=\textbullet]
+    \item Là cách viết số nguyên dương n thành tổng các số nguyên dương
+    \item Ví dụ: 5 = 5 = 4+1 = 3+2 = 3+1+1 = 2+2+1 = 2+1+1+1 = 1+1+1+1+1
+\end{itemize}
+
+
+\textbf{Phân hoạch thành k phần (pk(n)):} 
+\begin{itemize}[label=\textbullet]
+    \item Là các phân hoạch có đúng k số hạng
+    \item Ký hiệu: $\lambda = (\lambda_1, \lambda_2, \ldots, \lambda_k)$ với $\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_k \geq 1$ và $\sum_{i=1}^{k} \lambda_i = n$
+\end{itemize}
+
+\textbf{Biểu đồ Ferrers:} 
+\begin{itemize}[label=\textbullet]
+    \item Biểu diễn hình học của phân hoạch bằng các hàng dấu *
+    \item Hàng thứ i có $\lambda_i$ dấu *
+    \item Các hàng sắp xếp từ trên xuống theo thứ tự không tăng
+\end{itemize}
+
+\textbf{Biểu đồ Ferrers chuyển vị ($F^T$):} 
+\begin{itemize}[label=\textbullet]
+    \item Là biểu đồ Ferrers của phân hoạch liên hợp
+    \item Được tạo bằng cách hoán đổi hàng và cột của biểu đồ gốc
+    \item Phần tử thứ j trong phân hoạch chuyển vị = số dấu * ở cột thứ j của biểu đồ gốc
+\end{itemize}
+
+\textbf{Công thức và tính chất:} 
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Điều kiện phân hoạch:}
+$$\lambda = (\lambda_1, \lambda_2, \ldots, \lambda_k) \text{ với } \lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_k \geq 1$$
+$$\sum_{i=1}^{k} \lambda_i = n$$
+    \item \textbf{Giới hạn giá trị:} Nếu $\lambda = (\lambda_1, \lambda_2, \ldots, \lambda_k)$ thì $\lambda^T = (\mu_1, \mu_2, \ldots, \mu_m)$ với:
+$$\mu_j = |\{i : \lambda_i \geq j\}|$$
+\end{itemize}
+
+\textbf{Ý tưởng thuật toán:} 
+\paragraph{Bước 1: Sinh phân hoạch $p_k(n)$}
+\begin{enumerate}
+    \item Sử dụng đệ quy để sinh tất cả các phân hoạch
+    \item Đảm bảo thứ tự không tăng: $\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_k$
+    \item Giới hạn giá trị của phần tử đầu tiên để đảm bảo tồn tại phân hoạch
+\end{enumerate}
+
+\paragraph{Bước 2: Vẽ biểu đồ Ferrers}
+\begin{enumerate}
+    \item Với mỗi phần $\lambda_i$, in ra $\lambda_i$ dấu *
+    \item Xuống dòng sau mỗi hàng
+\end{enumerate}
+
+\paragraph{Bước 3: Tìm và vẽ biểu đồ chuyển vị}
+\begin{enumerate}
+    \item Đếm số dấu * ở mỗi cột của biểu đồ gốc
+    \item Tạo phân hoạch mới từ các giá trị đếm được
+    \item Vẽ biểu đồ Ferrers cho phân hoạch mới
+\end{enumerate}
+
+\textbf{Cài đặt Python:}
+\begin{itemize}[label=\textbullet]
+   \item File tổng hợp: \texttt{.\textbackslash code\textbackslash Project\_3\textbackslash BT1\textbackslash ferrers\_diagrams.py}
+\end{itemize}
+
+\textbf{Cài đặt C++:}
+\begin{itemize}[label=\textbullet]
+   \item File tổng hợp: \texttt{.\textbackslash code\textbackslash Project\_3\textbackslash BT1\textbackslash ferrers\_diagrams.cpp}
+\end{itemize}
+
+\subsection{Bài toán 2:}
+
+\begin{problembox}
+Nhập $n, k \in \mathbb{N}$. Đếm số phân hoạch của $n$ sao cho phần tử lớn nhất là $k$. So sánh $p_k(n)$ \& $p_{\max}(n, k)$.
+
+\end{problembox}
+
+\subsection{Bài toán 3:}
+
+\begin{problembox}
+Nhập $n, k \in \mathbb{N}$.
+\begin{enumerate}
+    \item[(a)] Đếm số phân hoạch tự liên hợp của $n$ có $k$ phần, ký hiệu $p_k^{\text{self-conj}}(n)$, rồi in ra các phân hoạch đó.
+    \item[(b)] Đếm số phân hoạch của $n$ có lẻ phần, rồi so sánh với $p_k^{\text{self-conj}}(n)$.
+    \item[(c)] Thiết lập công thức truy hồi cho $p_k^{\text{self-conj}}(n)$, rồi implement bằng:
+    \begin{enumerate}
+        \item[(i)] đệ quy,
+        \item[(ii)] quy hoạch động.
+    \end{enumerate}
+\end{enumerate}
+
+\end{problembox}
 
 \section{Project 4: Các Bài Toán Duyệt Đồ Thị và Cây}
 
