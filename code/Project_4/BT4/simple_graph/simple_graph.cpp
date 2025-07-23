@@ -372,7 +372,7 @@ void test_all_converters_with_file() {
     cout << "TEST: All 12 Simple Graph Converters (Đọc từ file)" << endl;
     cout << string(60, '=') << endl;
     
-    SimpleGraphMatrix original = read_graph_from_file("../simple_graph_simple.inp");
+    SimpleGraphMatrix original = read_graph_from_file("../simple_graph_sample.inp");
     if (original.num_vertices == 0) {
         return;
     }

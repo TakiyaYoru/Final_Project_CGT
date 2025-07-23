@@ -237,7 +237,7 @@ def map_to_extended_list(map_graph: SimpleGraphMap) -> SimpleGraphExtendedList:
 def test_all_converters_with_file():
     """Test tất cả 12 converters với data từ file"""
     
-    original = read_graph_from_file("../simple_graph_simple.inp")
+    original = read_graph_from_file("../simple_graph_sample.inp")
 
     if original.num_vertices == 0:
         return

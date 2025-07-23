@@ -486,7 +486,7 @@ def test_all_multigraph_converters():
     print("TEST: All 12 Multigraph Converters (Đọc từ file)")
     print("=" * 60)
     
-    original = read_multigraph_from_file("../multi_graph_simple.inp")
+    original = read_multigraph_from_file("../multi_graph_sample.inp")
     if original.num_vertices == 0:
         return
     original.display()

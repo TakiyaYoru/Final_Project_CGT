@@ -416,7 +416,7 @@ MultigraphExtendedList map_to_extended_list(const MultigraphMap& m) {
 void test_all_converters() {
     cout << "=== MULTIGRAPH CONVERTERS TEST ===" << endl;
     
-    MultigraphMatrix original = read_multigraph_from_file("../multi_graph_simple.inp");
+    MultigraphMatrix original = read_multigraph_from_file("../multi_graph_sample.inp");
     if (original.num_vertices == 0) return;
     
     cout << "\nOriginal:" << endl;

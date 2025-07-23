@@ -169,6 +169,22 @@
     \item \textbf{Cây:} $3 \times 2 = 6$ converters (3 dạng biểu diễn × 2 chuyển đổi mỗi dạng)
 \end{itemize}
 
+\textbf{Cài đặt Python:}
+\begin{itemize}[label=\textbullet]
+   \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash simple\_graph\textbackslash simple\_graph.py}
+   \item  File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash multi\_graph\textbackslash multi\_graph.py}
+   \item  File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash general\_graph\textbackslash general\_graph.py}
+   \item  File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash \textbackslash tree\textbackslash tree.py}
+\end{itemize}
+
+\textbf{Cài đặt C++:}
+\begin{itemize}[label=\textbullet]
+   \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash simple\_graph\textbackslash simple\_graphy.cpp }
+   \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash multi\_graph\textbackslash multi\_graph.cpp }
+   \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash general\_graph\textbackslash general\_graph.cpp }
+   \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT4\textbackslash tree\textbackslash tree.cpp }
+\end{itemize}
+\newpage
 \subsubsection{Simple Graph (Đơn đồ thị) - 12 Converters}
 
 \textbf{Định nghĩa:} Simple Graph $G = (V, E)$ là đồ thị không có cạnh song song và không có khuyên (self-loops).
@@ -339,9 +355,665 @@
     \item Trả về $ext\_graph$
 \end{enumerate}
 
+\subsubsection{Multigraph (Đa đồ thị) - 12 Converters}
+
+\textbf{Định nghĩa:} Multigraph $G = (V, E)$ là đồ thị cho phép có nhiều cạnh song song giữa hai đỉnh (parallel edges) nhưng không có khuyên (self-loops).
+\vspace{0.5cm}
+
+\textbf{4 dạng biểu diễn:}
+\begin{itemize}[label=\textbullet]
+    \item 1. Adjacency Matrix (Ma trận kề): $matrix[i][j] \in \{0, 1, 2, 3, \ldots\}$ - số cạnh giữa đỉnh $i$ và $j$
+    \item 2. Adjacency List (Danh sách kề): cho phép entries trùng lặp
+    \item 3. Extended Adjacency List: nhiều Edge objects cho cùng một cặp đỉnh
+    \item 4. Adjacency Map: $adj\_map[u][v] = count$ - số cạnh từ $u$ đến $v$
+\end{itemize}
+
+\textbf{Converter 1: Matrix $\rightarrow$ List}
+
+\textbf{Ý tưởng chính:} Duyệt upper triangle và thêm multiple entries cho parallel edges.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo $n$ danh sách rỗng cho adjacency list
+    \item Chỉ duyệt các vị trí $(i,j)$ với $i \leq j$ (upper triangle)
+    \item Nếu $matrix[i][j] = count > 0$:
+    \begin{itemize}
+        \item Nếu $i = j$: thêm $j$ vào $adj\_list[i]$ đúng $count$ lần (self-loop)
+        \item Nếu $i \neq j$: thêm $j$ vào $adj\_list[i]$ và $i$ vào $adj\_list[j]$ mỗi cái $count$ lần
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 2: List $\rightarrow$ Matrix}
+
+\textbf{Ý tưởng chính:} Đếm frequency của mỗi neighbor thay vì chỉ đánh dấu 0/1.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo ma trận $n \times n$ toàn $0$
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \begin{itemize}
+        \item Tạo $neighbor\_count = \emptyset$ (hash map)
+        \item Với mỗi $v \in adj\_list[u]$: tăng $neighbor\_count[v]$
+        \item Với mỗi $(v, count) \in neighbor\_count$: đặt $matrix[u][v] = count$
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 3: Matrix $\rightarrow$ Extended List}
+
+\textbf{Ý tưởng chính:} Tạo multiple Edge objects cho parallel edges, mỗi edge có unique ID.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Duyệt upper triangle của ma trận
+    \item Với mỗi cạnh $(i,j)$ có $matrix[i][j] = count > 0$:
+    \begin{itemize}
+        \item Lặp $count$ lần:
+        \begin{itemize}
+            \item Tạo $Edge(i,j, weight, unique\_id)$
+            \item Thêm vào $outgoing[i]$, $incoming[j]$, $all\_edges$
+            \item Nếu $i \neq j$: tạo $Edge(j,i)$ tương tự
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 4: Extended List $\rightarrow$ Matrix}
+
+\textbf{Ý tưởng chính:} Đếm frequency của mỗi $(source, target)$ pair từ $all\_edges$.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo ma trận $n \times n$ toàn $0$
+    \item Tạo $edge\_count = \emptyset$ (hash map)
+    \item Với mỗi $edge \in all\_edges$: tăng $edge\_count[(edge.source, edge.target)]$
+    \item Với mỗi $((u,v), count) \in edge\_count$: đặt $matrix[u][v] = count$
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 5: List $\rightarrow$ Extended List}
+
+\textbf{Ý tưởng chính:} Sử dụng canonical form để tránh duplicate và xử lý đúng undirected edges.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Tạo $edge\_count = \emptyset$ (hash map)
+    \item Với mỗi đỉnh $u$ và neighbor $v \in adj\_list[u]$:
+    \begin{itemize}
+        \item Tính $canonical\_key = (\min(u,v), \max(u,v))$
+        \item Tăng $edge\_count[canonical\_key]$
+    \end{itemize}
+    \item Với mỗi $((u,v), total\_count) \in edge\_count$:
+    \begin{itemize}
+        \item $actual\_count = $ nếu $u = v$ thì $total\_count$ ngược lại $total\_count / 2$
+        \item Tạo $actual\_count$ Edge objects cho cặp $(u,v)$
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 6: Extended List $\rightarrow$ List}
+
+\textbf{Ý tưởng chính:} Trích xuất target vertices từ outgoing edges (bao gồm duplicates).
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \item Với mỗi $edge \in outgoing[u]$:
+    \item Thêm $edge.target$ vào $adj\_list[u]$ (bao gồm cả duplicates)
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 7: Matrix $\rightarrow$ Map}
+
+\textbf{Ý tưởng chính:} Duyệt toàn bộ ma trận và lưu non-zero entries vào hash map.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo $n$ hash maps rỗng
+    \item Duyệt toàn bộ ma trận $(i,j)$ với $0 \leq i,j < n$
+    \item Nếu $matrix[i][j] = count > 0$: đặt $adj\_map[i][j] = count$
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 8: Map $\rightarrow$ Matrix}
+
+\textbf{Ý tưởng chính:} Duyệt hash maps và sao chép counts vào ma trận.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo ma trận $n \times n$ toàn $0$
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \item Với mỗi $(v, count) \in adj\_map[u]$: đặt $matrix[u][v] = count$
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 9: List $\rightarrow$ Map}
+
+\textbf{Ý tưởng chính:} Đếm frequency của neighbors và lưu vào hash map.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \begin{itemize}
+        \item Tạo $neighbor\_count = \emptyset$ (hash map)
+        \item Với mỗi $v \in adj\_list[u]$: tăng $neighbor\_count[v]$
+        \item Đặt $adj\_map[u] = neighbor\_count$
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 10: Map $\rightarrow$ List}
+
+\textbf{Ý tưởng chính:} Mở rộng mỗi entry $(v, count)$ thành $count$ duplicates trong list.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \item Với mỗi $(v, count) \in adj\_map[u]$:
+    \item Thêm $v$ vào $adj\_list[u]$ đúng $count$ lần
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 11: Extended List $\rightarrow$ Map}
+
+\textbf{Ý tưởng chính:} Đếm frequency của targets từ outgoing edges.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \begin{itemize}
+        \item Tạo $target\_count = \emptyset$ (hash map)
+        \item Với mỗi $edge \in outgoing[u]$: tăng $target\_count[edge.target]$
+        \item Đặt $adj\_map[u] = target\_count$
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Converter 12: Map $\rightarrow$ Extended List}
+
+\textbf{Ý tưởng chính:} Sử dụng canonical form để tránh duplicate edges và tạo multiple Edge objects.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Tạo $processed\_edges = \emptyset$ (hash set)
+    \item Với mỗi đỉnh $u$ và $(v, count) \in adj\_map[u]$:
+    \begin{itemize}
+        \item Tính $canonical\_key = (\min(u,v), \max(u,v))$
+        \item Nếu $canonical\_key \notin processed\_edges$:
+        \begin{itemize}
+            \item Thêm $canonical\_key$ vào $processed\_edges$
+            \item Lặp $count$ lần: tạo $Edge(u,v)$ và $Edge(v,u)$ (nếu $u \neq v$)
+            \item Cập nhật các cấu trúc dữ liệu
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{General Graph (Đồ thị tổng quát) - 12 Converters}
+
+\textbf{Định nghĩa:} General Graph $G = (V, E)$ là đồ thị cho phép có cả cạnh song song (parallel edges) và khuyên (self-loops).
+\vspace{0.5cm}
+
+\textbf{Converter 1: Matrix $\rightarrow$ List}
+
+\textbf{Ý tưởng chính:} Duyệt toàn bộ ma trận (không chỉ upper triangle) để xử lý self-loops riêng biệt.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo $n$ danh sách rỗng cho adjacency list
+    \item Duyệt toàn bộ ma trận $(i,j)$ với $0 \leq i,j < n$
+    \item Nếu $matrix[i][j] = count > 0$:
+    \begin{itemize}
+        \item Nếu $i = j$: thêm $j$ vào $adj\_list[i]$ đúng $count$ lần (self-loop)
+        \item Nếu $i \neq j$ và $i < j$: thêm $j$ vào $adj\_list[i]$ và $i$ vào $adj\_list[j]$ mỗi cái $count$ lần (undirected)
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 2: List $\rightarrow$ Matrix}
+
+\textbf{Ý tưởng chính:} Đếm frequency của mỗi neighbor, xử lý self-loops đặc biệt.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo ma trận $n \times n$ toàn $0$
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \begin{itemize}
+        \item Tạo $neighbor\_count = \emptyset$ (hash map)
+        \item Với mỗi $v \in adj\_list[u]$: tăng $neighbor\_count[v]$
+        \item Với mỗi $(v, count) \in neighbor\_count$:
+        \begin{itemize}
+            \item Nếu $u = v$: đặt $matrix[u][v] = count$ (self-loop)
+            \item Nếu $u \neq v$: đặt $matrix[u][v] = count$ (undirected edge sẽ được xử lý từ cả 2 phía)
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 3: Matrix $\rightarrow$ Extended List}
+
+\textbf{Ý tưởng chính:} Tạo Edge objects với unique IDs, xử lý self-loops và normal edges riêng biệt.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Duyệt toàn bộ ma trận $(i,j)$ với $0 \leq i,j < n$
+    \item Với mỗi entry có $matrix[i][j] = count > 0$:
+    \begin{itemize}
+        \item Nếu $i = j$ (self-loop):
+        \begin{itemize}
+            \item Lặp $count$ lần: tạo $Edge(i,j,weight,unique\_id)$
+            \item Thêm vào $outgoing[i]$, $incoming[j]$, $all\_edges$
+            \item \textbf{Chú ý:} Chỉ tạo 1 edge object cho mỗi self-loop
+        \end{itemize}
+        \item Nếu $i \neq j$ và $i < j$ (normal edge):
+        \begin{itemize}
+            \item Lặp $count$ lần: tạo $Edge(i,j)$ và $Edge(j,i)$
+            \item Cập nhật các cấu trúc dữ liệu tương ứng
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 4: Extended List $\rightarrow$ Matrix}
+
+\textbf{Ý tưởng chính:} Đếm frequency của mỗi $(source, target)$ pair từ $all\_edges$.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo ma trận $n \times n$ toàn $0$
+    \item Tạo $edge\_count = \emptyset$ (hash map)
+    \item Với mỗi $edge \in all\_edges$: tăng $edge\_count[(edge.source, edge.target)]$
+    \item Với mỗi $((u,v), count) \in edge\_count$: đặt $matrix[u][v] = count$
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 5: List $\rightarrow$ Extended List}
+
+\textbf{Ý tưởng chính:} Xử lý self-loops trước, sau đó xử lý normal edges với canonical form.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item \textbf{Xử lý self-loops trước:}
+    \begin{itemize}
+        \item Với mỗi đỉnh $u$: đếm $self\_loop\_count = |\{v \in adj\_list[u] : v = u\}|$
+        \item Nếu $self\_loop\_count > 0$: tạo $self\_loop\_count$ Edge objects cho $(u,u)$
+    \end{itemize}
+    \item \textbf{Xử lý normal edges với canonical form:}
+    \begin{itemize}
+        \item Tạo $edge\_count = \emptyset$ (hash map)
+        \item Với mỗi đỉnh $u$ và neighbor $v \in adj\_list[u]$ với $u \neq v$:
+        \begin{itemize}
+            \item Tính $canonical\_key = (\min(u,v), \max(u,v))$
+            \item Tăng $edge\_count[canonical\_key]$
+        \end{itemize}
+        \item Với mỗi $((u,v), total\_count) \in edge\_count$:
+        \begin{itemize}
+            \item $actual\_count = total\_count / 2$ (undirected edges được đếm 2 lần)
+            \item Tạo $actual\_count$ cặp Edge objects: $Edge(u,v)$ và $Edge(v,u)$
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 6: Extended List $\rightarrow$ List}
+
+\textbf{Ý tưởng chính:} Trích xuất target vertices từ outgoing edges (bao gồm cả self-loops).
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \item Với mỗi $edge \in outgoing[u]$:
+    \item Thêm $edge.target$ vào $adj\_list[u]$ (bao gồm cả self-loops và duplicates)
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 7: Matrix $\rightarrow$ Map}
+
+\textbf{Ý tưởng chính:} Duyệt toàn bộ ma trận và lưu non-zero entries vào hash map.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo $n$ hash maps rỗng
+    \item Duyệt toàn bộ ma trận $(i,j)$ với $0 \leq i,j < n$
+    \item Nếu $matrix[i][j] = count > 0$: đặt $adj\_map[i][j] = count$
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 8: Map $\rightarrow$ Matrix}
+
+\textbf{Ý tưởng chính:} Duyệt hash maps và sao chép counts vào ma trận.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo ma trận $n \times n$ toàn $0$
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \item Với mỗi $(v, count) \in adj\_map[u]$: đặt $matrix[u][v] = count$
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 9: List $\rightarrow$ Map}
+
+\textbf{Ý tưởng chính:} Đếm frequency của neighbors (bao gồm self-loops) và lưu vào hash map.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \begin{itemize}
+        \item Tạo $neighbor\_count = \emptyset$ (hash map)
+        \item Với mỗi $v \in adj\_list[u]$: tăng $neighbor\_count[v]$ (bao gồm $v = u$ cho self-loops)
+        \item Đặt $adj\_map[u] = neighbor\_count$
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 10: Map $\rightarrow$ List}
+
+\textbf{Ý tưởng chính:} Mở rộng mỗi entry $(v, count)$ thành $count$ duplicates trong list.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \item Với mỗi $(v, count) \in adj\_map[u]$:
+    \item Thêm $v$ vào $adj\_list[u]$ đúng $count$ lần (bao gồm self-loops khi $v = u$)
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 11: Extended List $\rightarrow$ Map}
+
+\textbf{Ý tưởng chính:} Đếm frequency của targets từ outgoing edges (bao gồm self-loops).
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Với mỗi đỉnh $u = 0, 1, \ldots, n-1$:
+    \begin{itemize}
+        \item Tạo $target\_count = \emptyset$ (hash map)
+        \item Với mỗi $edge \in outgoing[u]$: tăng $target\_count[edge.target]$
+        \item Đặt $adj\_map[u] = target\_count$
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 12: Map $\rightarrow$ Extended List}
+
+\textbf{Ý tưởng chính:} Sử dụng canonical form để tránh duplicate edges, xử lý self-loops riêng biệt.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Tạo $processed\_edges = \emptyset$ (hash set)
+    \item Với mỗi đỉnh $u$ và $(v, count) \in adj\_map[u]$:
+    \begin{itemize}
+        \item Nếu $u = v$ (self-loop):
+        \begin{itemize}
+            \item Lặp $count$ lần: tạo $Edge(u,u,weight,unique\_id)$
+            \item Cập nhật $outgoing[u]$, $incoming[u]$, $all\_edges$
+        \end{itemize}
+        \item Nếu $u \neq v$ (normal edge):
+        \begin{itemize}
+            \item Tính $canonical\_key = (\min(u,v), \max(u,v))$
+            \item Nếu $canonical\_key \notin processed\_edges$:
+            \begin{itemize}
+                \item Thêm $canonical\_key$ vào $processed\_edges$
+                \item Lặp $count$ lần: tạo $Edge(u,v)$ và $Edge(v,u)$
+                \item Cập nhật các cấu trúc dữ liệu
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Tree Representations (Biểu diễn cây) - 6 Converters}
+
+\textbf{Định nghĩa:} Tree $T = (V, E)$ là đồ thị liên thông không có chu trình với $|E| = |V| - 1$, có một đỉnh đặc biệt gọi là root.
+\vspace{0.5cm}
+
+\textbf{3 dạng biểu diễn cây:}
+\begin{itemize}[label=\textbullet]
+    \item 1. Array of Parents: Mảng $P[v] = parent[v]$ hoặc $nil$ nếu $v$ là root
+    \item 2. First-Child Next-Sibling: Cặp mảng $(F, N)$ với first-child và next-sibling links
+    \item 3. Graph-Based Representation: Sử dụng Extended Adjacency List hoặc Adjacency Map
+\end{itemize}
+
+\textbf{Array of Parents Representation}
+\vspace{0.5cm}
+
+\textbf{Định nghĩa:} Let $T = (V, E)$ be a tree with $n$ nodes. Array-of-parents representation là mảng $P$ với $n$ phần tử, indexed theo nodes của tree.
+
+$$P[v] = \begin{cases}
+parent[v] & \text{if } v \neq root[T] \\
+nil & \text{if } v = root[T]
+\end{cases} \quad \forall v \in V$$
+
+
+
+
+\textbf{First-Child Next-Sibling Representation}
+\vspace{0.5cm}
+
+\textbf{Định nghĩa:} Let $T = (V, E)$ be a tree with $n$ nodes. First-child next-sibling representation là cặp $(F, N)$ với hai mảng $n$ phần tử.
+
+$$F[v] = \begin{cases}
+first[v] & \text{if } v \text{ is not a leaf} \\
+nil & \text{if } v \text{ is a leaf}
+\end{cases}$$
+
+$$N[v] = \begin{cases}
+next[v] & \text{if } v \text{ is not a last child} \\
+nil & \text{if } v \text{ is a last child}
+\end{cases}$$
+
+\vspace{0.5cm}
+
+\textbf{Graph-Based Representation of Trees}
+\vspace{0.5cm}
+
+\textbf{Định nghĩa:} Trees được biểu diễn sử dụng abstract operations trên graphs, implement bằng Extended Adjacency List hoặc Adjacency Map.
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 1: Array of Parents $\rightarrow$ First-Child Next-Sibling}
+\vspace{0.5cm}
+
+\textbf{Ý tưởng chính:} Xây dựng children lists từ parent array, sau đó tạo first-child và next-sibling links.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo mảng $F$ và $N$ toàn $nil$
+    \item Tạo $children\_lists[u] = \emptyset$ cho mọi $u \in \{0, 1, \ldots, n-1\}$
+    \item Với mỗi node $v$ có $P[v] \neq nil$:
+    \begin{itemize}
+        \item $parent \leftarrow P[v]$
+        \item Thêm $v$ vào $children\_lists[parent]$
+    \end{itemize}
+    \item Với mỗi node $u$ có $children\_lists[u] \neq \emptyset$:
+    \begin{itemize}
+        \item Sắp xếp $children\_lists[u]$ theo thứ tự tăng dần
+        \item $F[u] \leftarrow children\_lists[u][0]$ (first child)
+        \item Với $i = 0, 1, \ldots, |children\_lists[u]| - 2$:
+        \begin{itemize}
+            \item $N[children\_lists[u][i]] \leftarrow children\_lists[u][i+1]$
+        \end{itemize}
+        \item $N[children\_lists[u][-1]] \leftarrow nil$ (last child)
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 2: First-Child Next-Sibling $\rightarrow$ Array of Parents}
+\vspace{0.5cm}
+
+\textbf{Ý tưởng chính:} DFS traversal từ root để xác định parent cho mỗi node.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo mảng $P$ toàn $nil$
+    \item Tìm root node $r$ (có thể tìm bằng cách check node nào không là child của node khác)
+    \item Gọi DFS từ root:
+    \begin{itemize}
+        \item \textbf{procedure} DFS$(node, parent)$:
+        \begin{itemize}
+            \item $P[node] \leftarrow parent$
+            \item $child \leftarrow F[node]$
+            \item \textbf{while} $child \neq nil$ \textbf{do}:
+            \begin{itemize}
+                \item DFS$(child, node)$
+                \item $child \leftarrow N[child]$
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item Gọi DFS$(r, nil)$
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 3: Array of Parents $\rightarrow$ Graph-Based}
+\vspace{0.5cm}
+
+\textbf{Ý tưởng chính:} Tạo directed edges từ parent đến children trong graph representation.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo graph $G$ với $n$ vertices
+    \item Với mỗi node $v$ có $P[v] \neq nil$:
+    \begin{itemize}
+        \item $parent \leftarrow P[v]$
+        \item Thêm directed edge $(parent, v)$ vào $G$
+    \end{itemize}
+    \item Lưu root reference: node $r$ có $P[r] = nil$
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 4: Graph-Based $\rightarrow$ Array of Parents}
+\vspace{0.5cm}
+
+\textbf{Ý tưởng chính:} Trích xuất parent relationships từ incoming edges của graph.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo mảng $P$ toàn $nil$
+    \item Với mỗi node $v$ trong graph:
+    \begin{itemize}
+        \item Nếu $|incoming[v]| = 0$: $P[v] \leftarrow nil$ (root node)
+        \item Ngược lại: $P[v] \leftarrow source(incoming[v][0])$ (parent)
+    \end{itemize}
+\end{enumerate}
+
+
+\vspace{0.5cm}
+
+\textbf{Converter 5: First-Child Next-Sibling $\rightarrow$ Graph-Based}
+\vspace{0.5cm}
+
+\textbf{Ý tưởng chính:} DFS traversal từ root để xây dựng directed edges trong graph.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo graph $G$ với $n$ vertices
+    \item Tìm root node $r$
+    \item Gọi DFS từ root:
+    \begin{itemize}
+        \item \textbf{procedure} DFS$(node, parent)$:
+        \begin{itemize}
+            \item \textbf{if} $parent \neq nil$ \textbf{then} thêm edge $(parent, node)$ vào $G$
+            \item $child \leftarrow F[node]$
+            \item \textbf{while} $child \neq nil$ \textbf{do}:
+            \begin{itemize}
+                \item DFS$(child, node)$
+                \item $child \leftarrow N[child]$
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item Gọi DFS$(r, nil)$
+\end{enumerate}
 
 
 \newpage
+
+\textbf{Converter 6: Graph-Based $\rightarrow$ First-Child Next-Sibling}
+\vspace{0.5cm}
+
+\textbf{Ý tưởng chính:} Sử dụng outgoing edges để xây dựng first-child và next-sibling links.
+
+\textbf{Thuật toán:}
+\begin{enumerate}
+    \item Khởi tạo mảng $F$ và $N$ toàn $nil$
+    \item Với mỗi node $u$ trong graph:
+    \begin{itemize}
+        \item Lấy $children \leftarrow [target(e) : e \in outgoing[u]]$
+        \item Sắp xếp $children$ theo thứ tự tăng dần
+        \item Nếu $children \neq \emptyset$:
+        \begin{itemize}
+            \item $F[u] \leftarrow children[0]$ (first child)
+            \item Với $i = 0, 1, \ldots, |children| - 2$:
+            \begin{itemize}
+                \item $N[children[i]] \leftarrow children[i+1]$
+            \end{itemize}
+            \item $N[children[-1]] \leftarrow nil$ (last child)
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\vspace{0.5cm}
+
+
+
+
+
+
+\newpage
+
+\subsection{Bài toán 5: Làm Problems 1.1 - 1.6 và Exercises 1.1 - 1.10 [Val21, pp. 39-40]}
+
+\begin{problembox}
+    \textbf{Làm Problems 1.1–1.6 và Exercises 1.1–1.10 [Val21, pp. 39–40]} 
+
+\end{problembox}
+
+\textbf{Cài đặt Python:}
+\begin{itemize}[label=\textbullet]
+    \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT5\textbackslash python}
+\end{itemize}
+
+\textbf{Cài đặt C++:}
+\begin{itemize}[label=\textbullet]
+    \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT5\textbackslash c++}
+\end{itemize}
 
 \subsection{Bài toán 6: Tree Edit Distance}
 
