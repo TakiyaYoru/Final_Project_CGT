@@ -240,6 +240,7 @@ $$\mu_j = |\{i : \lambda_i \geq j\}|$$
 \begin{itemize}[label=\textbullet]
    \item File tổng hợp: \texttt{.\textbackslash code\textbackslash Project\_3\textbackslash BT1\textbackslash ferrers\_diagrams.cpp}
 \end{itemize}
+\newpage
 
 \subsection{Bài toán 2:}
 
@@ -247,6 +248,76 @@ $$\mu_j = |\{i : \lambda_i \geq j\}|$$
 Nhập $n, k \in \mathbb{N}$. Đếm số phân hoạch của $n$ sao cho phần tử lớn nhất là $k$. So sánh $p_k(n)$ \& $p_{\max}(n, k)$.
 
 \end{problembox}
+
+\textbf{Phân tích đề bài:}
+
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Input:} Hai số nguyên dương n và k
+    \item \textbf{Yêu cầu:}
+    \item Tính $p_{\max}(n, k)$ - số phân hoạch của n sao cho phần tử lớn nhất là k
+    \item So sánh $p_k(n)$ (số phân hoạch thành đúng k phần) và $p_{\max}(n, k)$
+
+\end{itemize}
+
+- \textbf{Ví dụ:}
+        
+            
+- n = 5, k = 3: Các phân hoạch có phần tử lớn nhất là 3:
+                
+                    
+- (3, 2)
+                    
+- (3, 1, 1)
+                
+                $\Rightarrow p_{\max}(5, 3) = 2$
+            
+- $p_3(5)$ (phân hoạch thành đúng 3 phần): (3, 2), (3, 1, 1), (2, 2, 1)
+                $\Rightarrow p_3(5) = 3$
+
+\vspace{0.5cm}
+\textbf{Kiến thức nền tảng:}
+
+\paragraph{Phân hoạch $p_k(n)$:}
+Là số cách viết n thành tổng các số nguyên dương không tăng với đúng k số hạng.
+
+\paragraph{Phân hoạch $p_{\max}(n, k)$:}
+Là số cách viết n thành tổng các số nguyên dương không tăng sao cho phần tử lớn nhất là k.
+
+\paragraph{Liên hệ giữa $p_k(n)$ và $p_{\max}(n, k)$:}
+[label=$\bullet$]
+    
+- $p_k(n)$ và $p_{\max}(n, k)$ là hai khái niệm khác nhau
+    
+- $p_k(n)$: cố định số phần = k
+    
+- $p_{\max}(n, k)$: cố định phần tử lớn nhất = k
+
+
+\subsubsection*{Ý tưởng thuật toán:}
+
+\paragraph{Tính $p_{\max}(n, k)$:}
+\begin{enumerate}
+    \item Sinh tất cả phân hoạch của n
+    \item Lọc ra các phân hoạch có phần tử lớn nhất = k
+    \item Đếm số lượng phân hoạch thỏa mãn
+\end{enumerate}
+
+\paragraph{Tính $p_k(n)$:}
+\begin{enumerate}
+    \item Sinh tất cả phân hoạch của n thành đúng k phần
+    \item Đếm số lượng phân hoạch
+\end{enumerate}
+
+\textbf{Cài đặt Python:}
+\begin{itemize}[label=\textbullet]
+   \item File tổng hợp: \texttt{.\textbackslash code\textbackslash Project\_3\textbackslash BT2\textbackslash partition\_comparison.py}
+\end{itemize}
+
+\textbf{Cài đặt C++:}
+\begin{itemize}[label=\textbullet]
+   \item File tổng hợp: \texttt{.\textbackslash code\textbackslash Project\_3\textbackslash BT2\textbackslash partition\_comparison.cpp}
+\end{itemize}
 
 \subsection{Bài toán 3:}
 
@@ -261,6 +332,18 @@ Nhập $n, k \in \mathbb{N}$.
         \item[(ii)] quy hoạch động.
     \end{enumerate}
 \end{enumerate}
+
+
+\textbf{Phân tích đề bài:}
+
+
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Input:} Hai số nguyên dương n và k
+    \item \textbf{Yêu cầu:}
+    \item Tính $p_{\max}(n, k)$ - số phân hoạch của n sao cho phần tử lớn nhất là k
+    \item So sánh $p_k(n)$ (số phân hoạch thành đúng k phần) và $p_{\max}(n, k)$
+
+\end{itemize}
 
 \end{problembox}
 
