@@ -33,7 +33,7 @@ pair<vector<int>, vector<int>> dijkstra_general(vector<vector<pii>>& adj_list, i
         cout << "Phát hiện trọng số âm tại cạnh " << neg_u << "→" << neg_v 
              << " (trọng số: " << neg_w << ")" << endl;
 
-        return {{}, {}};  // Trả về vector rỗng
+        return {{}, {}};
     }
     
     vector<int> dist(n, INT_MAX);

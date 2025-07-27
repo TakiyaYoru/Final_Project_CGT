@@ -1201,6 +1201,10 @@ nil & \text{if } v \text{ is a last child}
 
 \end{problembox}
 
+\textbf{Chưa hoàn chỉnh - Only code}
+
+\vspace{0.5cm}
+
 \textbf{Cài đặt Python:}
 \begin{itemize}[label=\textbullet]
     \item File: \texttt{.\textbackslash code\textbackslash Project\_4\textbackslash BT5\textbackslash python}
@@ -1338,7 +1342,6 @@ traversal. (c) top-down traveral. (d) bottom-up traversal.}
 \textbf{Phân tích:}
 \begin{itemize}[label=\textbullet]
     \item Multigraph cho phép đa cạnh giữa hai đỉnh, tức một cặp đỉnh có thể nối với nhau bởi nhiều hơn một cạnh.
-    \item Có thể có khuyên (self-loop).
     \item BFS vẫn hoạt động như trên đồ thị đơn, nhờ mảng \texttt{visited} đảm bảo không thăm lại đỉnh.
     \item Đa cạnh và khuyên chỉ làm danh sách kề có thể lặp lại phần tử, không làm thay đổi logic duyệt.
 \end{itemize}
@@ -1607,7 +1610,7 @@ Khoảng cách ngắn nhất từ đỉnh 0:
 \textbf{Multigraph:} là một đồ thị:
 \begin{itemize}[label=\textbullet]
     \item Có nhiều cạnh giữa cùng một cặp đỉnh
-    \item Có thể có self-loops (cạnh từ đỉnh về chính nó)
+
 \end{itemize}
 {\centering
     \includegraphics[width=0.3\textwidth]{assets/image/multigraph.png}
@@ -1667,18 +1670,18 @@ if dist[u] + weight < dist[v]:
 3 4 2
 4 5 3
 1 4 5
-4 4 1
+1 4 1
 \end{verbatim}
 
 \textbf{Output mẫu:}
 \begin{verbatim}
-Khoảng cách ngắn nhất từ đỉnh 0:
-Đỉnh 0: 0 | Đường đi: 0
-Đỉnh 1: 4 | Đường đi: 0 → 1
-Đỉnh 2: 12 | Đường đi: 0 → 1 → 2
-Đỉnh 3: 3 | Đường đi: 0 → 3
-Đỉnh 4: 5 | Đường đi: 0 → 3 → 4
-Đỉnh 5: 8 | Đường đi: 0 → 3 → 4 → 5
+Khoang cach ngan nhat tu dinh 0:
+Dinh 0: 0 | Duong di: 0
+Dinh 1: 4 | Duong di: 0 -> 1
+Dinh 2: 10 | Duong di: 0 -> 3 -> 4 -> 5 -> 2
+Dinh 3: 3 | Duong di: 0 -> 3
+Dinh 4: 5 | Duong di: 0 -> 3 -> 4
+Dinh 5: 8 | Duong di: 0 -> 3 -> 4 -> 5
 \end{verbatim}
 
 \newpage
